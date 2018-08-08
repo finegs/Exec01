@@ -21,9 +21,15 @@
     <ClCompile Include="MLogger.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="MyOStream.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MLogger.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MyOStream.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

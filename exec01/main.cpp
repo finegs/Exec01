@@ -11,18 +11,18 @@
 
 using namespace std;
 
-char* timestamp(char* str) {
-	char t[24];
-	struct tm timeinfo;
-	struct timeb tm;
-	
-	ftime(&tm);
-	localtime_s(&timeinfo, &tm.time);
-
-	strftime(t, 20, "%Y-%m-%d %H:%M:%S", &timeinfo);
-	sprintf_s(str, 24, "%s.%03u", t, tm.millitm);
-	return str;
-}
+//static char* timestamp(char* str) {
+//	char temp[24];
+//	struct tm timeinfo;
+//	struct timeb tm;
+//	
+//	ftime(&tm);
+//	localtime_s(&timeinfo, &tm.time);
+//
+//	strftime(temp, 20, "%Y-%m-%d %H:%M:%S", &timeinfo);
+//	sprintf_s(str, 24, "%s.%03u", temp, tm.millitm);
+//	return str;
+//}
 
 int main(int argc, char* argv[]) {
 	bool isRun = true;
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 
 	while (isRun)
 	{
-		logger << timestamp(ts) <<" input : "; logger.flush();
+		logger << timestamp(ts) << " input : "; logger.flush();
 		getline(cin, str);
 		ss.clear();
 		ss << str;

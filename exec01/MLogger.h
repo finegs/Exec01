@@ -3,11 +3,25 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
+#include <sstream>
 #include <atomic>
 #include <thread>
 #include <mutex>
 #include <queue>
+#include <string>
+#include <sys/timeb.h>
 #include <condition_variable>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    extern char* timestamp(char* str);
+    //char* timestamp(char* str);
+    extern char* t2s(char* str, timeb tm);
+
+#ifdef __cplusplus 
+    }
+#endif
 
 enum MLogLevel {
 	Error
@@ -20,6 +34,7 @@ enum MLogLevel {
 	, Debug4
 };
 
+class MLog;
 class MLogMsg {
 	friend class MLog;
 private:
@@ -30,7 +45,7 @@ public:
 	{
 		ftime(&tm);
 		msg = new char[sizeof(_msg)];
-		strcpy(msg, _msg);
+		strcpy_s(msg, sizeof(_msg), _msg);
 	}
 	~MLogMsg();
 	timeb getTime() const;
@@ -39,9 +54,10 @@ public:
 	MLogMsg& operator=(const MLogMsg& msg);
 	MLogMsg(MLogMsg&& other);
 	MLogMsg& operator=(MLogMsg&& other);
-	friend std::ostream& operator<<(std::ostream& os, const MLogMsg& logmsg);
-
+	//friend std::ostream& operator<<(std::ostream& os, const MLogMsg& logmsg);
+    //friend MLog& operator<<(MLog& logger, const MLogMsg & logmsg);
 };
+
 
 class MLog {
 
@@ -65,8 +81,8 @@ public:
 
 	void log(const char* _msg);
 
-	template<class T>
-	MLog& operator<<(const T& obj);
+	template<typename T>
+	const MLog& operator<<(const T& obj) const;
 
 protected:
 	std::ostringstream os;

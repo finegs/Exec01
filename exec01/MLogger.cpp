@@ -10,21 +10,20 @@
 #include <thread>
 #include "MLogger.h"
 
-
-static char* nowTime(char* str) {
-	char t[24];
+char* timestamp(char* str) {
+	char temp[24];
 	struct tm timeinfo;
 	struct timeb tm;
 
 	ftime(&tm);
 	localtime_s(&timeinfo, &tm.time);
 
-	strftime(t, 20, "%Y-%m-%d %H:%M:%S", &timeinfo);
-	sprintf_s(str, 24, "%s.%03u", t, tm.millitm);
+	strftime(temp, 20, "%Y-%m-%d %H:%M:%S", &timeinfo);
+	sprintf_s(str, 24, "%s.%03u", temp, tm.millitm);
 	return str;
 }
 
-static char* t2s(char* str, timeb tm) {
+ char* t2s(char* str, timeb tm) {
 	char t[24];
 	struct tm ti;
 
@@ -67,7 +66,7 @@ MLog::MLog() : logLevel(Info), isRun(true) {};
 
 std::ostringstream& MLog::get(MLogLevel level) {
 	char ts[24];
-	os << nowTime(ts);
+	os << timestamp(ts);
 	os << " " << level << ": ";
 	os << std::string(level > Debug ? 0 : level - Debug, '\t');
 	logLevel = level;
@@ -171,14 +170,26 @@ char * MLogMsg::getMsg() const
 	return msg;
 }
 
-std::ostream& operator<<(std::ostream& os, const MLogMsg& logmsg) {
-	char tsstr[24];
-	os << t2s(tsstr, logmsg.getTime()) << " " << logmsg.msg; 
-	return os;
-}
+//std::ostream& operator<<(std::ostream& os, const MLogMsg& logmsg) {
+//	char tsstr[24];
+//	os << t2s(tsstr, logmsg.getTime()) << " " << logmsg.msg; 
+//	return os;
+//}
 
-template<class T>
-MLog& MLog::operator<<(const T& obj) {
+//std::ostream& MLogMsg::operator<<(std::ostream& os, const MLogMsg& logmsg) {
+//	char tsstr[24];
+//	os << t2s(tsstr, logmsg.getTime()) << " " << logmsg.msg; 
+//	return os;
+//}
+//MLog& MLogMsg::operator<<(MLog& logger, const MLogMsg& logmsg) {
+//	char tsstr[24];
+//	logger << t2s(tsstr, logmsg.getTime()) << " " << logmsg.msg; 
+//	return logger;
+//}
+
+template<typename T>
+const MLog& MLog::operator<<(const T& obj) const {
 	os << obj;
 	return *this;
 }
+
